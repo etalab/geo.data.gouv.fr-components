@@ -2,7 +2,7 @@ import React from 'react'
 import Autocomplete from 'react-autocomplete'
 import PropTypes from 'prop-types'
 
-import Loader from './loader'
+import Loader from '../loader'
 
 import theme from '../../styles/theme'
 
@@ -10,16 +10,11 @@ class SearchInput extends React.Component {
   constructor(props) {
     super(props)
 
-    this.getItemValue = this.getItemValue.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
 
     this.renderInput = this.renderInput.bind(this)
     this.renderMenu = this.renderMenu.bind(this)
-  }
-
-  getItemValue(item) {
-    return item.nom
   }
 
   handleSearch(event) {
@@ -62,7 +57,7 @@ class SearchInput extends React.Component {
     return (
       <div className={`menu ${value.length ? '' : 'hidden'}`}>
         { loading && !items.length ? (
-          <Loader />
+          <div className='item'><Loader /></div>
         ) : items.length === 0 ? (
           <div className='item'>Aucun résultat</div>
         ) : items}
@@ -70,7 +65,7 @@ class SearchInput extends React.Component {
           .menu {
             margin-right: 100%;
             float: left;
-            width: 100%;
+            width: calc(100% - 2px);
             background-color: ${theme.colors.white};
             border: 1px solid ${theme.border};
             border-radius: 5px;
@@ -95,15 +90,15 @@ class SearchInput extends React.Component {
   }
 
   render() {
-    const {value, results, renderItem} = this.props
+    const {value, results, renderItem, getItemValue, wrapperStyle} = this.props
     return (
-      <div>
+      <div className='wrap'>
         <Autocomplete
           value={value}
           inputProps={{id: 'states-autocomplete'}}
-          wrapperStyle={null}
+          wrapperStyle={wrapperStyle}
           items={results}
-          getItemValue={this.getItemValue}
+          getItemValue={getItemValue}
           onSelect={this.handleSelect}
           onChange={this.handleSearch}
           renderItem={renderItem}
@@ -117,6 +112,10 @@ class SearchInput extends React.Component {
               top: 98px;
             }
           }
+
+          .menu {
+            border-color: red;
+          }
           `}</style>
       </div>
     )
@@ -128,16 +127,19 @@ SearchInput.propTypes = {
   value: PropTypes.string,
   placeholder: PropTypes.string,
   loading: PropTypes.bool,
+  wrapperStyle: PropTypes.object,
   handleSelect: PropTypes.func.isRequired,
   search: PropTypes.func.isRequired,
-  renderItem: PropTypes.func.isRequired
+  renderItem: PropTypes.func.isRequired,
+  getItemValue: PropTypes.func.isRequired
 }
 
 SearchInput.defaultProps = {
   results: [],
   value: '',
   placeholder: '',
-  loading: false
+  loading: false,
+  wrapperStyle: null
 }
 
 export default SearchInput
