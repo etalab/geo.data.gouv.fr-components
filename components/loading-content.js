@@ -9,8 +9,12 @@ const LoadingContent = ({loading, error, children}) => {
       <div className='loader'>
         <Loader />
         <style jsx>{`
-          .loading {
-            margin: 1em 0;
+          .loader {
+            margin: 1em;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
           }
         `}</style>
       </div>
@@ -21,7 +25,7 @@ const LoadingContent = ({loading, error, children}) => {
         <Notification message={error.message} type='error' />
         <style jsx>{`
           .error {
-            margin: 1em 0;
+            margin: 1em;
           }
         `}</style>
       </div>
